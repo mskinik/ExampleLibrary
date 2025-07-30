@@ -32,32 +32,34 @@ android {
         jvmTarget = "11"
     }
 }
-
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            from(components["release"])
-            groupId = "com.github.mskinik"
-            artifactId = "stringutils"
-            version = "1.3.0"
-            pom {
-                name.set("StringUtils")
-                description.set("String utilities for Android")
-                url.set("https://github.com/mskinik/ExampleLibrary")
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.mskinik"
+                artifactId = "stringutils"
+                version = "1.3.0"
+                pom {
+                    name.set("StringUtils")
+                    description.set("String utilities for Android")
+                    url.set("https://github.com/mskinik/ExampleLibrary")
+                }
             }
         }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/mskinik/ExampleLibrary")
-            credentials {
-                username = "mskinik"
-                password = "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"
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/mskinik/ExampleLibrary")
+                credentials {
+                    username = "mskinik"
+                    password = "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"
+                }
             }
         }
     }
 }
+
 
 dependencies {
 

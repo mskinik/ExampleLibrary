@@ -19,4 +19,6 @@ object StringUtils {
         return text.map { turkishMap[it] ?: it }.joinToString("")
     }
 
+    fun newfun() = "newfun"
+
 }
