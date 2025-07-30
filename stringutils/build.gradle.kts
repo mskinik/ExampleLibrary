@@ -52,11 +52,12 @@ afterEvaluate {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/mskinik/ExampleLibrary")
                 credentials {
-                    username = "mskinik"
-                    password = "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"
+                    username = System.getenv("GH_PACKAGES_USER") ?: ""
+                    password = System.getenv("GH_PACKAGES_TOKEN") ?: ""
                 }
             }
         }
+
     }
 }
 
