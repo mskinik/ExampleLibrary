@@ -39,7 +39,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.mskinik"
                 artifactId = "stringutils"
-                version = "1.3.0"
+                version = "1.3.1"
                 pom {
                     name.set("StringUtils")
                     description.set("String utilities for Android")
