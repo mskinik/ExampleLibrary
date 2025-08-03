@@ -23,4 +23,6 @@ object StringUtils {
 
     fun tagv140funtion() = "v1.4.0"
 
+    fun tagv141funtion() = "stringutils v1.4.1"
+
 }

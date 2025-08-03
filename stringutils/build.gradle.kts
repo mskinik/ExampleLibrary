@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("maven-publish")
+   // id("maven-publish")
 }
 
 android {
@@ -32,6 +32,7 @@ android {
         jvmTarget = "11"
     }
 }
+/*
 afterEvaluate {
     publishing {
         publications {
@@ -59,7 +60,7 @@ afterEvaluate {
         }
 
     }
-}
+} */
 
 
 dependencies {
