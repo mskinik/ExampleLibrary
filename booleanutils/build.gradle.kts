@@ -1,11 +1,10 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("maven-publish")
 }
 
 android {
-    namespace = "com.mskinik.stringutils"
+    namespace = "com.mskinik.booleanutils"
     compileSdk = 36
 
     defaultConfig {
@@ -32,35 +31,6 @@ android {
         jvmTarget = "11"
     }
 }
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                from(components["release"])
-                groupId = "com.github.mskinik"
-                artifactId = "stringutils"
-                version = "1.3.2"
-                pom {
-                    name.set("StringUtils")
-                    description.set("String utilities for Android")
-                    url.set("https://github.com/mskinik/ExampleLibrary")
-                }
-            }
-        }
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/mskinik/ExampleLibrary")
-                credentials {
-                    username = System.getenv("GH_PACKAGES_USER") ?: ""
-                    password = System.getenv("GH_PACKAGES_TOKEN") ?: ""
-                }
-            }
-        }
-
-    }
-}
-
 
 dependencies {
 

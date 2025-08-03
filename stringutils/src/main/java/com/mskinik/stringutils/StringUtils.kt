@@ -21,4 +21,6 @@ object StringUtils {
 
     fun newfun() = "newfun"
 
+    fun tagv140funtion() = "v1.4.0"
+
 }
