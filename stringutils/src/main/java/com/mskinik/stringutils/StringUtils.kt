@@ -19,4 +19,6 @@ object StringUtils {
         return text.map { turkishMap[it] ?: it }.joinToString("")
     }
 
+    fun versionv122()="v122"
+
 }
