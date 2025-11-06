@@ -1,5 +1,7 @@
 package com.mskinik.stringutils
 
+import com.mskinik.utils.model.Person
+
 object StringUtils {
     fun reverse(text: String): String = text.reversed()
 
@@ -22,5 +24,9 @@ object StringUtils {
     fun newfun() = "newfun"
 
     fun tagv140funtion() = "v1.4.0"
+
+    fun tryModelLibrary(){
+        val person: Person = Person(name = "James",age = 30)
+    }
 
 }
