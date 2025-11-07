@@ -39,7 +39,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.mskinik"
                 artifactId = "stringutils"
-                version = "1.4.4"
+                version = "2.0.0"
                 pom {
                     name.set("StringUtils")
                     description.set("String utilities for Android")
@@ -70,5 +70,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.github.mskinik:MyModelLibrary:v1.4.1")
+    implementation("com.github.mskinik:MyModelLibrary:v2.0.0")
 }

@@ -1,5 +1,8 @@
 package com.mskinik.stringutils
 
+import android.util.Log
+import com.mskinik.utils.model.City
+import com.mskinik.utils.model.PackageClass
 import com.mskinik.utils.model.Person
 
 object StringUtils {
@@ -26,7 +29,17 @@ object StringUtils {
     fun tagv140funtion() = "v1.4.0"
 
     fun tryModelLibrary(){
-        val person: Person = Person(name = "James",age = 30)
+        val person: Person = Person(name = "James")
+    }
+
+    fun tryModelLibraryPackageClass(){
+       val packageClass =  PackageClass()
+        Log.d("TAG", "tryModelLibraryPackageClass: girdi1 packageName = ${packageClass.packageName} appName = ${packageClass.appName} appVersion = ${packageClass.appVersion}")
+    }
+    fun tryModelLibraryCityClass(){
+       val city =  City(name = "Bursa","Marmara")
+        Log.d("TAG", "tryModelLibraryCityClass: girdi1 cityName = ${city.name} cityRegion = ${city.region} ")
+
     }
 
 }
