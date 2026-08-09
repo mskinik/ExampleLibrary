@@ -54,3 +54,13 @@ publishing {
         }
     }
 }
+
+// See stringutils/build.gradle.kts for why: tools with incomplete Android/Gradle
+// variant-aware resolution support (e.g. OpenRewrite's Gradle plugin) fail with
+// AmbiguousVariantsFailure against multi-variant Gradle Module Metadata. The
+// BoM's constraints are also encoded in the plain POM's <dependencyManagement>,
+// so disabling module metadata here doesn't lose any functionality for
+// standard consumers.
+tasks.withType<org.gradle.api.publish.tasks.GenerateModuleMetadata> {
+    enabled = false
+}

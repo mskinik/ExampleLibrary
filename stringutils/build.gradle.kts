@@ -37,6 +37,18 @@ afterEvaluate {
         ?: System.getenv("GITHUB_REF_NAME")?.removePrefix("v")
         ?: "2.0.0"
 
+    // Disable Gradle Module Metadata (.module) generation for this publication.
+    // Android library components publish multiple variants (releaseApiElements,
+    // releaseRuntimeElements, etc.) in the .module file. Tools that don't fully
+    // implement Android/Gradle's variant-aware resolution (e.g. the OpenRewrite
+    // Gradle plugin's internal classpath resolver) fail with
+    // AmbiguousVariantsFailure when resolving this dependency, which silently
+    // breaks type attribution for any recipe touching this library's classes.
+    // Falling back to the plain POM avoids the ambiguity.
+    tasks.withType<org.gradle.api.publish.tasks.GenerateModuleMetadata> {
+        enabled = false
+    }
+
     publishing {
         publications {
             create<MavenPublication>("release") {
