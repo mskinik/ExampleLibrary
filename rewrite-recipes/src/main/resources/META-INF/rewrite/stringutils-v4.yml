@@ -10,16 +10,35 @@
 # running it both updates the version pin AND fixes the call sites that
 # would otherwise fail to compile after the bump.
 #
+# Two migration strategies are combined here:
+#   - ChangeMethodName is type-aware and handles Java call sites correctly,
+#     but relies on OpenRewrite being able to resolve type information for
+#     com.mskinik.stringutils.StringUtils, which requires a healthy
+#     (non-ambiguous) classpath.
+#   - FindAndReplace is a plain text substitution restricted to *.kt files.
+#     It does not require type attribution at all, so it still works for
+#     Kotlin consumers even when type resolution fails or the Kotlin parser
+#     isn't wired up. It's intentionally scoped to the exact call text
+#     "StringUtils.reverse(" to avoid renaming unrelated symbols.
+#
 type: specs.openrewrite.org/v1beta/recipe
 name: com.mskinik.examplelibrary.migrate.StringUtilsToV4
 displayName: Migrate ExampleLibrary stringutils to v4
 description: >
-  Renames StringUtils.reverse(text) to StringUtils.reverseText(text) and
-  upgrades the examplelibrary-bom dependency to 4.0.1.
+  Renames StringUtils.reverse(text) to StringUtils.reverseText(text) in Java
+  and Kotlin sources, and upgrades the examplelibrary-bom dependency to 4.0.1.
 recipeList:
+  # Type-aware rewrite for Java call sites.
   - org.openrewrite.java.ChangeMethodName:
       methodPattern: com.mskinik.stringutils.StringUtils reverse(String)
       newMethodName: reverseText
+  # Text-based fallback for Kotlin call sites.
+  - org.openrewrite.text.FindAndReplace:
+      find: "StringUtils.reverse("
+      replace: "StringUtils.reverseText("
+      filePattern: "**/*.kt"
+      regex: false
+      caseSensitive: true
   - org.openrewrite.gradle.UpgradeDependencyVersion:
       groupId: com.github.mskinik
       artifactId: examplelibrary-bom
