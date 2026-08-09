@@ -37,6 +37,15 @@ android {
 
 dependencies {
 
+    // BoM POC: platform(project(":bom")) here demonstrates the mechanism using
+    // an in-repo module dependency. External consumer apps would instead write
+    // implementation(platform("com.github.mskinik:examplelibrary-bom:1.0.0"))
+    // and pull artifacts via GitHub Packages without a version number, as
+    // shown below for MyModelLibrary and stringutils.
+    implementation(platform(project(":bom")))
+    implementation(project(":stringutils"))
+    implementation("com.github.mskinik:MyModelLibrary")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
