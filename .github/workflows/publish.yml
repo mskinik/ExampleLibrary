@@ -16,7 +16,7 @@ jobs:
           java-version: 17
       - name: Make gradlew executable
         run: chmod +x ./gradlew
-      - run: ./gradlew :stringutils:publish
+      - run: ./gradlew :stringutils:publish :bom:publish
         env:
           GH_PACKAGES_USER: ${{ secrets.GH_PACKAGES_USER }}
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}

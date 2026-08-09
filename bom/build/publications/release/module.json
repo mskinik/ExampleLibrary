@@ -1,0 +1,64 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.github.mskinik",
+    "module": "examplelibrary-bom",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.13"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "com.github.mskinik",
+          "module": "stringutils",
+          "version": {
+            "requires": "2.0.0"
+          }
+        },
+        {
+          "group": "com.github.mskinik",
+          "module": "MyModelLibrary",
+          "version": {
+            "requires": "v2.0.0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "platform",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencyConstraints": [
+        {
+          "group": "com.github.mskinik",
+          "module": "stringutils",
+          "version": {
+            "requires": "2.0.0"
+          }
+        },
+        {
+          "group": "com.github.mskinik",
+          "module": "MyModelLibrary",
+          "version": {
+            "requires": "v2.0.0"
+          }
+        }
+      ]
+    }
+  ]
+}
