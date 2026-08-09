@@ -24,3 +24,4 @@ rootProject.name = "ExampleLibrary"
 include(":app")
 include(":stringutils")
 include(":booleanutils")
+include(":bom")
