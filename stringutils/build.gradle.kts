@@ -33,13 +33,17 @@ android {
     }
 }
 afterEvaluate {
+    val stringutilsVersion = (findProperty("stringutilsVersion") as String?)
+        ?: System.getenv("GITHUB_REF_NAME")?.removePrefix("v")
+        ?: "2.0.0"
+
     publishing {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
                 groupId = "com.github.mskinik"
                 artifactId = "stringutils"
-                version = "2.0.0"
+                version = stringutilsVersion
                 pom {
                     name.set("StringUtils")
                     description.set("String utilities for Android")
