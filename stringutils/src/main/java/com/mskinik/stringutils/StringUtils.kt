@@ -6,7 +6,11 @@ import com.mskinik.utils.model.PackageClass
 import com.mskinik.utils.model.Person
 
 object StringUtils {
-    fun reverse(text: String): String = text.reversed()
+    // BREAKING CHANGE (v4.0.0): renamed from reverse(text) -> reverseText(text)
+    // to make the method name consistent with the other *Text functions below.
+    // See :rewrite-recipes module for the OpenRewrite recipe that automates
+    // this migration for consumers.
+    fun reverseText(text: String): String = text.reversed()
 
     fun capitalizeWords(text: String): String =
         text.split(" ").joinToString(" ") { word ->

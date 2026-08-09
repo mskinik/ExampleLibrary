@@ -1,0 +1,26 @@
+#
+# Recipe: StringUtilsToV4
+#
+# Migrates consumers from stringutils 3.x to 4.x by fixing the breaking
+# change introduced in this release: StringUtils.reverse(text) was renamed
+# to StringUtils.reverseText(text) for naming consistency with the other
+# *Text functions in the same class.
+#
+# This recipe also bumps the BoM dependency to the matching release so that
+# running it both updates the version pin AND fixes the call sites that
+# would otherwise fail to compile after the bump.
+#
+type: specs.openrewrite.org/v1beta/recipe
+name: com.mskinik.examplelibrary.migrate.StringUtilsToV4
+displayName: Migrate ExampleLibrary stringutils to v4
+description: >
+  Renames StringUtils.reverse(text) to StringUtils.reverseText(text) and
+  upgrades the examplelibrary-bom dependency to 4.0.0.
+recipeList:
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: com.mskinik.stringutils.StringUtils reverse(String)
+      newMethodName: reverseText
+  - org.openrewrite.gradle.UpgradeDependencyVersion:
+      groupId: com.github.mskinik
+      artifactId: examplelibrary-bom
+      newVersion: 4.0.0
