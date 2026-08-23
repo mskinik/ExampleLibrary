@@ -9,7 +9,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - uses: actions/checkout@v4
@@ -23,3 +23,22 @@ jobs:
         env:
           GH_PACKAGES_USER: ${{ github.actor }}
           GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Package the migration CLI (manifest + init-script template + wrapper
+      # script) as a plain zip and attach it to a GitHub Release for this
+      # tag. This is the stand-in, in this POC repo, for publishing the same
+      # zip to an Artifactory "generic" repository in the real company
+      # setup: app teams download this one file - no git clone, and nothing
+      # is ever added to their own build.gradle.kts.
+      - name: Package migration CLI
+        run: |
+          cd migration-cli
+          zip -r ../migration-cli.zip .
+
+      - name: Publish migration CLI as a GitHub Release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: migration-cli.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

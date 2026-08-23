@@ -1,0 +1,57 @@
+// Generic OpenRewrite init script template used by migrate.ps1.
+// Placeholders (__UPPER_SNAKE_CASE__) are substituted by the CLI at runtime;
+// this file is never edited by hand and never lives inside a consumer app's
+// own build.gradle.kts. It is rendered to a temp file, passed to Gradle via
+// --init-script, and deleted after the run.
+//
+// Why an init script instead of applying the plugin in the app's own build
+// file: this is the officially documented OpenRewrite pattern for running
+// recipes "without modifying the build" (see OpenRewrite docs: Running
+// Rewrite on a Gradle project without modifying the build). The app's
+// build.gradle.kts is never touched, so there is nothing to add and nothing
+// to clean up afterward.
+initscript {
+    repositories {
+        maven { url = uri("https://plugins.gradle.org/m2") }
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Pinned (not "latest.release") for reproducible migrations across
+        // every app team running this CLI.
+        classpath("org.openrewrite:plugin:__OPENREWRITE_PLUGIN_VERSION__")
+        // Without this, OpenRewrite's Android-aware source parsing throws
+        // NoClassDefFoundError: com/android/build/gradle/TestedExtension.
+        // The init script's plugin is loaded in an isolated classloader
+        // that only sees classes declared on ITS OWN classpath here - it
+        // does not "inherit" visibility of the Android Gradle Plugin classes
+        // that the target app's own build.gradle.kts applies via its
+        // plugins{} block. This must match (or be close to) the app's own
+        // AGP version; migrate.ps1 auto-detects it from the app's
+        // gradle/libs.versions.toml.
+        classpath("com.android.tools.build:gradle:__AGP_VERSION__")
+    }
+}
+
+rootProject {
+    plugins.apply(org.openrewrite.gradle.RewritePlugin::class.java)
+
+    dependencies {
+        add("rewrite", "org.openrewrite.recipe:rewrite-recipe-bom:__REWRITE_RECIPE_BOM_VERSION__")
+        // Required for OpenRewrite to parse .kt sources at all; without this
+        // the plugin silently skips every Kotlin file.
+        add("rewrite", "org.openrewrite:rewrite-kotlin")
+        add("rewrite", "__RECIPE_ARTIFACT__:__RECIPE_VERSION__")
+    }
+
+    // Deliberately no `repositories { ... }` block here. Modern Gradle
+    // projects (this one included) set
+    // repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS in
+    // settings.gradle.kts, which rejects any repository declared outside of
+    // settings.gradle.kts - including ones added from an init script. This
+    // is fine: the consumer app's settings.gradle.kts already declares the
+    // GitHub Packages repository (that's how it resolves the BoM itself),
+    // so the `rewrite` configuration's dependencies resolve from the exact
+    // same repositories the rest of the build already uses. Nothing extra
+    // to configure here.
+}

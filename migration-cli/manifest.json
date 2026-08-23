@@ -1,0 +1,17 @@
+{
+  "$comment": "Registry of available BoM migration targets. SDK team appends a new entry here every time a breaking-change release ships. App teams never edit this file; the migrate.ps1 CLI reads it to know which recipe artifact/version to run for a given --to version.",
+  "targets": {
+    "4.0.1": {
+      "recipeArtifact": "com.github.mskinik:examplelibrary-rewrite-recipes",
+      "recipeVersion": "4.0.3",
+      "activeRecipe": "com.mskinik.examplelibrary.migrate.StringUtilsToV4",
+      "description": "StringUtils.reverse(text) -> reverseText(text); bumps BoM to 4.0.1"
+    },
+    "5.0.0": {
+      "recipeArtifact": "com.github.mskinik:examplelibrary-rewrite-recipes",
+      "recipeVersion": "5.0.0",
+      "activeRecipe": "com.mskinik.examplelibrary.migrate.StringUtilsToV5",
+      "description": "StringUtils.removeTurkishChars(text) -> removeTRChars(textValue); StringUtils.newfun() -> newExamplefun(); bumps BoM to 5.0.0"
+    }
+  }
+}
