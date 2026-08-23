@@ -1,0 +1,80 @@
+#
+# Recipe: StringUtilsToV5
+#
+# Migrates consumers from stringutils 4.x to 5.x by fixing two breaking
+# renames introduced in this release:
+#   - StringUtils.removeTurkishChars(text) -> removeTRChars(textValue)
+#     (both the method name AND the parameter name changed)
+#   - StringUtils.newfun() -> newExamplefun()
+#
+# This recipe also bumps the BoM dependency to the matching release so that
+# running it both updates the version pin AND fixes the call sites that
+# would otherwise fail to compile after the bump.
+#
+# Two migration strategies are combined here, same as StringUtilsToV4:
+#   - ChangeMethodName is type-aware and handles Java call sites correctly,
+#     but relies on OpenRewrite being able to resolve type information for
+#     com.mskinik.stringutils.StringUtils, which requires a healthy
+#     (non-ambiguous) classpath (see :bom / :stringutils GenerateModuleMetadata
+#     workaround).
+#   - FindAndReplace is a plain text substitution restricted to *.kt files.
+#     It does not require type attribution at all, so it still works for
+#     Kotlin consumers even when type resolution fails or the Kotlin parser
+#     isn't wired up.
+#
+# Named-argument call sites (e.g. removeTurkishChars(text = "x")) need an
+# extra, narrowly-scoped replacement for the parameter name itself, since
+# renaming the method alone would leave a call to the *new* method name with
+# the *old* parameter name, which no longer exists and would fail to compile.
+# Java has no named arguments, so this extra step is Kotlin-only.
+#
+type: specs.openrewrite.org/v1beta/recipe
+name: com.mskinik.examplelibrary.migrate.StringUtilsToV5
+displayName: Migrate ExampleLibrary stringutils to v5
+description: >
+  Renames StringUtils.removeTurkishChars(text) to removeTRChars(textValue),
+  and StringUtils.newfun() to newExamplefun(), in Java and Kotlin sources,
+  and upgrades the examplelibrary-bom dependency to 5.0.0.
+recipeList:
+  # --- removeTurkishChars -> removeTRChars ---
+  # Type-aware rewrite for Java call sites (method name only; Java has no
+  # named arguments so the parameter rename doesn't affect Java callers).
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: com.mskinik.stringutils.StringUtils removeTurkishChars(String)
+      newMethodName: removeTRChars
+  # Text-based fallback for Kotlin call sites (positional or named-arg calls
+  # using the old parameter name as a plain call, e.g. removeTurkishChars(x)).
+  - org.openrewrite.text.FindAndReplace:
+      find: "StringUtils.removeTurkishChars("
+      replace: "StringUtils.removeTRChars("
+      filePattern: "**/*.kt"
+      regex: false
+      caseSensitive: true
+  # Kotlin named-argument fix: after the call above renames the method, any
+  # call that used `text = ...` as a named argument still refers to the old
+  # parameter name, which no longer exists on removeTRChars. Narrowly scoped
+  # to the exact "removeTRChars(text = " prefix to avoid touching unrelated
+  # "text = " occurrences elsewhere in the codebase.
+  - org.openrewrite.text.FindAndReplace:
+      find: "StringUtils.removeTRChars(text = "
+      replace: "StringUtils.removeTRChars(textValue = "
+      filePattern: "**/*.kt"
+      regex: false
+      caseSensitive: true
+
+  # --- newfun -> newExamplefun ---
+  - org.openrewrite.java.ChangeMethodName:
+      methodPattern: com.mskinik.stringutils.StringUtils newfun()
+      newMethodName: newExamplefun
+  - org.openrewrite.text.FindAndReplace:
+      find: "StringUtils.newfun("
+      replace: "StringUtils.newExamplefun("
+      filePattern: "**/*.kt"
+      regex: false
+      caseSensitive: true
+
+  # --- BoM version bump ---
+  - org.openrewrite.gradle.UpgradeDependencyVersion:
+      groupId: com.github.mskinik
+      artifactId: examplelibrary-bom
+      newVersion: 5.0.0
