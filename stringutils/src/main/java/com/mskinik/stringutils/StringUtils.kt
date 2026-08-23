@@ -16,7 +16,7 @@ object StringUtils {
         text.split(" ").joinToString(" ") { word ->
             word.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
         }
-    fun removeTurkishChars(text: String): String {
+    fun removeTRChars(textValue: String): String {
         val turkishMap = mapOf(
             'ç' to 'c', 'Ç' to 'C',
             'ğ' to 'g', 'Ğ' to 'G',
@@ -25,10 +25,10 @@ object StringUtils {
             'ş' to 's', 'Ş' to 'S',
             'ü' to 'u', 'Ü' to 'U'
         )
-        return text.map { turkishMap[it] ?: it }.joinToString("")
+        return textValue.map { turkishMap[it] ?: it }.joinToString("")
     }
 
-    fun newfun() = "newfun"
+    fun newExamplefun() = "newfun"
 
     fun tagv140funtion() = "v1.4.0"
 
